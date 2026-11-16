@@ -1,0 +1,74 @@
+services:
+#========================================================================================
+#                   postgres
+#====================================================================================
+ postgres-cloud:
+  image: postgres:16-bookworm
+
+  container_name: campuscloud-postgres
+  restart: always
+
+  environment:
+   POSTGRES_USER: postgres
+   POSTGRES_PASSWORD: CampusCloudPostgres#
+   POSTGRES_DB: campuscloud
+
+  ports:
+   - "54320:5432"
+
+  volumes: 
+   - campuscloud-postgres_data:/var/lib/postgresql/data
+  
+  networks:
+   - campus-network
+
+#========================================================================================
+#                  pgadmi
+#====================================================================================
+
+
+ pgadmin:
+  image: dpage/pgadmin4:6.17
+
+
+  container_name: campuscloud-pgadmi
+  restart: always
+
+  environment:
+   PGADMIN_DEFAULT_EMAIL: admin@admin.com
+   PGADMIN_DEFAULT_PASSWORD: adminpassword#
+   
+
+  ports:
+   - "8083:80"
+
+  volumes: 
+   - campuscloud-pgadmin_data:/var/lib/pgadmin
+  
+  networks:
+   - campus-network
+
+
+#========================================================================================
+#                 VOLUMES
+#====================================================================================
+
+
+volumes:
+
+ campuscloud-postgres_data:
+  external: true
+
+ campuscloud-pgadmin_data:
+  external: true 
+
+
+
+#========================================================================================
+#                 RED
+#====================================================================================
+
+
+networks:
+ campus-network:
+  external: true
